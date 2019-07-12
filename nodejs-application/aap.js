@@ -6,4 +6,15 @@ const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contrac
 var contractAddress = '0x7BF279c22160fd69A46ebA80b33C10e0be64C588';
 var contract = new web3.eth.Contract(contractInfo.abi, contractAddress);
 
-contract.methods.getUser('0x5E9D7c51408cfa236B65b34a476bF439eaD89aC7').call().then(console.log);
+web3.eth.getAccounts().then(function(accounts){    
+     for(let i = 0 ; i < accounts.length; i++){
+        contract.methods.getUser(accounts[i]).call().then(console.log);
+    }
+    
+    contract.methods.createUser(accounts[3],'ASAD','TEST').send({from: accounts[0]}).on('transactionHash', (hash) => {
+        console.log(hash);
+    }).on('error', (_error) => {
+        console.log('Address Already Exsists');
+    });
+
+});

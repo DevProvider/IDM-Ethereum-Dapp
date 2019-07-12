@@ -5,12 +5,13 @@ contract Signup {
     struct User {
         string name;
         string password;
+        string privateKey;
         bool set;
     }
 
     mapping(address => User) public users;
 
-    function createUser(address _userAddress, string memory userName, string memory password) public {
+    function createUser(address _userAddress, string memory userName, string memory password, string memory _privateKey) public {
         User storage user = users[_userAddress];
         // Check that the user does not already exist:
         require(!user.set,"User Already Exsists");
@@ -18,6 +19,7 @@ contract Signup {
         users[_userAddress] = User({
             name: userName,
             password: password,
+            privateKey: _privateKey,
             set: true
         });
     }
