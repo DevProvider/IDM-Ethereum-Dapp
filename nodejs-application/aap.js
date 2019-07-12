@@ -3,6 +3,7 @@
 //get libraries
 const express = require('express');
 const app = express();
+const exportcsv = require('./export-to-cvs');
 const bodyParser = require('body-parser');
 const request = require('request');
 const path = require('path');
@@ -14,7 +15,7 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0xD247311bbdCecD6AD6e677C74Bd14736B3781967';
+var contractAddress = '0x44Ee292fF9fff7c2d1D204E6Ce62d48E1d9C42E7';
 var contract = new web3.eth.Contract(contractInfo.abi, contractAddress);
 var accounts = [];
 var emptyAccounts = [];
@@ -63,6 +64,11 @@ app.get('/api/createuser', async function (req, res) {
         res.status(200).send("No Empty Accounts Left On Ganache Blockchain");
     }
     
+});
+
+app.get('/api/exportcsv',async function (req,res) {
+    exportcsv.writecsv(req.query.username,req.query.password,req.query.address,req.query.privateKey);
+    res.status(200).send("Csv Created");
 });
 
 function getEmptyAccounts() {

@@ -66,8 +66,8 @@
                                         <div class="user-profile-btn">
                                             <div class="row">
                                                 <div class="col-xl-12">
-                                                    <a href="#" class="btn">Clear</a>
-                                                    <a href="#" class="btn-click" id = "Button">Sign Up</a>
+                                                    <a href="#" class="btn btn-clear">Clear</a>
+                                                    <a href="#" class="btn btn-click" id = "Button">Sign Up</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -99,7 +99,7 @@
                                         </div>
                                         <div class="col-xl-9">
                                             <form action="#" id="delegate-info-form">
-                                                <input type="text" placeholder="Text" class = "input-address" id = "account" >
+                                                <input type="text" placeholder="Text" class = "input-address" name="address" id = "account" >
                                                 <i class="fas fa-copy"></i>
                                             </form>
                                         </div>
@@ -123,7 +123,7 @@
                         <div class="user-profile-btn">
                             <div class="row">
                                 <div class="col-xl-12">
-                                    <a href="#" class="btn">Export</a>
+                                    <a href="#" class="btn btn-export">Export</a>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +176,32 @@
             }
             });
         });
+        $(document).on('click', '.btn-clear', function (){
+            window.location.reload(true);
+        });
+
+
+        //EXPORT BUTTON CODING
+        $(document).on('click', '.btn-export', function () {
+            var username = $("input[type=text][name=username]").val();
+            var password  = $("input[type=password][name=password]").val();
+            var address = $("input[type=text][name=address]").val();
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8000/api/exportcsv?username="'+username+'"&password="'+password+'"&address="'+address+'"&privateKey="Nill"',
+                cache: false,
+                complete: function (data, status) { 
+                    if(status == 'success'){
+                    alert('Csv Created in the CSV directory');
+                }
+                else{
+                    alert('Error Occured. Check Node logs.');
+                }
+            }
+            });
+        });
     });
+
     </script>
 
 </body>
