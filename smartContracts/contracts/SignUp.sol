@@ -26,7 +26,6 @@ contract Signup {
 
     function getUser(address _userAddress) public view returns (int) {
         User storage user = users[_userAddress];
-        // require(!user.set,"Address is in use");
         if (!user.set)
         {
             return 0;
