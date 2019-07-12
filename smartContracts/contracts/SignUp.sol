@@ -12,7 +12,7 @@ contract Signup {
 
     function createUser(address _userAddress, string memory userName, string memory password) public {
         User storage user = users[_userAddress];
-        // Check that the user did not already exist:
+        // Check that the user does not already exist:
         require(!user.set,"User Already Exsists");
         //Store the user
         users[_userAddress] = User({
