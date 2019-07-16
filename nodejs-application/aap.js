@@ -7,6 +7,7 @@ const exportcsv = require('./export-to-cvs');
 const bodyParser = require('body-parser');
 const request = require('request');
 const path = require('path');
+const setting = require('./settings');
 
 //Web3 Decleration for Ethereum Connectivity.
 const Web3 = require('web3');
@@ -15,7 +16,8 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0x44Ee292fF9fff7c2d1D204E6Ce62d48E1d9C42E7';
+var contractAddress = '0x6F3B589a32328e5527CB16a5B8b68Fa6D1F2eE08';
+var privateKey = setting.privateKeyForGivenMnemonics;
 var contract = new web3.eth.Contract(contractInfo.abi, contractAddress);
 var accounts = [];
 var emptyAccounts = [];
@@ -50,9 +52,13 @@ app.listen(port, function () {
 app.get('/api/createuser', async function (req, res) {
     
     if( emptyAccounts.length > 0 ){
-        contract.methods.createUser(emptyAccounts[0],req.query.username,req.query.password,'privateKEy').send({from: accounts[0],gas:3000000}).on('transactionHash', (hash) => {
+        contract.methods.createUser(emptyAccounts[0],req.query.username,req.query.password,privateKey).send({from: accounts[0],gas:3000000}).on('transactionHash', (hash) => {
             getEmptyAccounts();
-            res.status(200).send(emptyAccounts[0]);
+            var resp = {
+                address : emptyAccounts[0],
+                key : privateKey
+            };
+            res.status(200).send(resp);
         }).on('error', (_error) => {
             getEmptyAccounts();
             res.status(500).send(_error);

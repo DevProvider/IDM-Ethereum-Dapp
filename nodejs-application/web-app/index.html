@@ -112,7 +112,7 @@
                                         </div>
                                         <div class="col-xl-9">
                                             <form action="#" id="delegate-info-form">
-                                                <input type="password" placeholder="**************">
+                                                <input type="text" class = "input-key" name='key' placeholder="**************">
                                                 <i class="fas fa-eye"></i>
                                             </form>
                                         </div>
@@ -167,7 +167,9 @@
                 cache: false,
                 complete: function (data, status) { 
                     if(status == 'success'){
-                    $('.input-address').val(data.responseText);
+                    $('.input-address').val(data.responseJSON.address);
+                    $('.input-key').val(data.responseJSON.key);
+                    console.log(data);
                     alert('New User Added');
                 }
                 else{
@@ -186,9 +188,11 @@
             var username = $("input[type=text][name=username]").val();
             var password  = $("input[type=password][name=password]").val();
             var address = $("input[type=text][name=address]").val();
+            var key = $("input[type=text][name=key]").val();
+
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8000/api/exportcsv?username="'+username+'"&password="'+password+'"&address="'+address+'"&privateKey="Nill"',
+                url: 'http://localhost:8000/api/exportcsv?username="'+username+'"&password="'+password+'"&address="'+address+'"&privateKey="'+key+'"',
                 cache: false,
                 complete: function (data, status) { 
                     if(status == 'success'){

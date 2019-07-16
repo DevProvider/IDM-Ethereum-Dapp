@@ -2013,12 +2013,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x44Ee292fF9fff7c2d1D204E6Ce62d48E1d9C42E7",
-      "transactionHash": "0xe3ff88748f38d5ca28766baebd2a204b2f919ffbfcf834ef80e67354a20d8667"
+      "address": "0x6F3B589a32328e5527CB16a5B8b68Fa6D1F2eE08",
+      "transactionHash": "0x0d9cd9e5058767cc50d7e3942a9d27720601b423fe7da06d11b319bd7cf27cab"
     }
   },
   "schemaVersion": "3.0.2",
-  "updatedAt": "2019-07-12T13:21:50.084Z",
+  "updatedAt": "2019-07-16T09:34:45.313Z",
   "devdoc": {
     "methods": {}
   },
