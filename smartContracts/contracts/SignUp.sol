@@ -1,28 +1,58 @@
 pragma solidity >=0.4.21 <0.6.0;
+pragma experimental ABIEncoderV2;
 
 contract Signup {
 
     struct User {
-        string name;
-        string password;
+        string username;
+        string  password;
         string privateKey;
         bool set;
     }
 
-    mapping(address => User) public users;
+    struct userDetails{
+        
+        string name;
+        string DOB;
+        string gender;
+        string NIC;
+        string desigination;
+        bool set;
+    }
 
-    function createUser(address _userAddress, string memory userName, string memory password, string memory _privateKey) public {
+    mapping(address => User) public users;
+    address [] addrList;
+    mapping(address => userDetails) public details;
+
+
+    function createUser(address _userAddress,string memory userName,string memory password,string memory _privateKey) public {
         User storage user = users[_userAddress];
         // Check that the user does not already exist:
         require(!user.set,"User Already Exsists");
         //Store the user
         users[_userAddress] = User({
-            name: userName,
+            username: userName,
             password: password,
             privateKey: _privateKey,
             set: true
         });
     }
+    function setDetail(address _userAddress, string memory name,string memory dob,string memory gender,
+    string memory nic,string memory desigination ) public {
+        userDetails storage detail = details[_userAddress];
+        require(!detail.set,"Profile is already saved");
+        //set Details
+        details[_userAddress] = userDetails({
+            name:name,
+            DOB:dob,
+            gender:gender,
+            NIC:nic,
+            desigination:desigination,
+            set:true
+        });
+
+
+}
 
     function getUser(address _userAddress) public view returns (int) {
         User storage user = users[_userAddress];
@@ -33,5 +63,18 @@ contract Signup {
 
         return 1;
     }
+
+   function get(address _userAddress) public view returns (User memory s, userDetails memory t) {
+           s.username = users[_userAddress].username;
+           s.password = users[_userAddress].password;
+           s.privateKey = users[_userAddress].privateKey;
+
+           t.name = details[_userAddress].name;
+           t.DOB = details[_userAddress].DOB;
+           t.gender = details[_userAddress].gender;
+           t.NIC = details[_userAddress].NIC;
+           t.desigination = details[_userAddress].desigination;
+
+           }
 }
 

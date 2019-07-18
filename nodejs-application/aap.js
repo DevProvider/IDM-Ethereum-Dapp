@@ -1,6 +1,7 @@
 'use strict';
 
 //get libraries
+
 const express = require('express');
 const app = express();
 const exportcsv = require('./export-to-cvs');
@@ -16,8 +17,13 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0x6F3B589a32328e5527CB16a5B8b68Fa6D1F2eE08';
+var contractAddress = '0x4aeDf345282eDBB95769b9446432fF34bb5cEa95';
+ 
+
+
+
 var privateKey = setting.privateKeyForGivenMnemonics;
+
 var contract = new web3.eth.Contract(contractInfo.abi, contractAddress);
 var accounts = [];
 var emptyAccounts = [];
@@ -48,15 +54,25 @@ app.listen(port, function () {
 //-------------------------------------------------------------
 //----------------------  GET API'S  --------------------------
 //-------------------------------------------------------------
+   var Increment = (function(n) {
+     var f = function() {}; // Only serves as constructor
+       f.prototype.toString = function() {
+        n += 1;
+        return n;
+    }
+    return f
+  }(-1)); 
+  
+  app.get('/api/createuser', async function (req, res) {
 
-app.get('/api/createuser', async function (req, res) {
+    var increment = new Increment();
     
     if( emptyAccounts.length > 0 ){
-        contract.methods.createUser(emptyAccounts[0],req.query.username,req.query.password,privateKey).send({from: accounts[0],gas:3000000}).on('transactionHash', (hash) => {
+        contract.methods.createUser(emptyAccounts[0],req.query.username,req.query.password,privateKey[increment]).send({from: accounts[0],gas:3000000}).on('transactionHash', (hash) => {
             getEmptyAccounts();
             var resp = {
                 address : emptyAccounts[0],
-                key : privateKey
+                key : privateKey[increment]
             };
             res.status(200).send(resp);
         }).on('error', (_error) => {
@@ -71,6 +87,7 @@ app.get('/api/createuser', async function (req, res) {
     }
     
 });
+     
 
 app.get('/api/exportcsv',async function (req,res) {
     exportcsv.writecsv(req.query.username,req.query.password,req.query.address,req.query.privateKey);
@@ -99,3 +116,7 @@ function getEmptyAccounts() {
     console.log(emptyAccounts.length);
     console.log(accounts[0]);
 }
+   
+        
+
+        
