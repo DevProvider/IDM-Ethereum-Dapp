@@ -123,8 +123,8 @@
                         <div class="user-profile-btn">
                             <div class="row">
                                 <div class="col-xl-12">
-                                    <a href="#" class="btn btn-export">Export</a>
-                                    <a href="login.html" class="btn btn-login" id = "Button">Login</a>
+                                    <a class="btn btn-export">Export</a>
+                                    <a class="btn btn-login" id = "Button">Login</a>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
                     console.log(data);
                     alert('New User Added');
                 }
-                else{
+                else {
                     alert('Error Occured. Check Node logs.');
                 }
             }
@@ -182,6 +182,13 @@
         $(document).on('click', '.btn-clear', function (){
             window.location.reload(true);
         });
+
+        $(document).on('click', '.btn-login', function (){
+            let _address = $("input[type=text][name=address]").val()
+            window.location.href = "userProfile.html?address="+_address+"";
+        });
+        						
+
 
 
         //EXPORT BUTTON CODING

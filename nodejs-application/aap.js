@@ -17,7 +17,7 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0x4aeDf345282eDBB95769b9446432fF34bb5cEa95';
+var contractAddress = '0xD46b9Db3303625656e67A37c6003ab005acB5A53';
  
 
 
@@ -60,8 +60,8 @@ app.listen(port, function () {
         n += 1;
         return n;
     }
-    return f
-  }(-1)); 
+    return f;
+  }(-1));
   
   app.get('/api/createuser', async function (req, res) {
 
@@ -85,6 +85,24 @@ app.listen(port, function () {
         getEmptyAccounts();
         res.status(200).send("No Empty Accounts Left On Ganache Blockchain");
     }
+    
+});
+
+ app.get('/api/setUserDetail', async function (req, res) {
+
+    console.log(req.query);
+    var increment = new Increment();
+    contract.methods.setUserDetail(req.query.address,req.query.name,req.query.dob,req.query.gender,req.query.nic,req.query.designation).send({from: accounts[0],gas:3000000}).on('transactionHash', (_hash) => {
+        var resp = {
+            address : req.query.address,
+            name : req.query.name,
+            hash : _hash
+        };
+        res.status(200).send(resp);
+    }).on('error', (_error) => {
+        res.status(500).send(_error);
+        console.log(_error);
+    });
     
 });
      

@@ -1,0 +1,197 @@
+<html class="no-js" lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>IdM Service Application</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" type="image/x-icon" href="img/logo.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="css/nice-select.css">
+    <link rel="stylesheet" href="css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/slick.css">
+    <link rel="stylesheet" href="css/default.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <header>
+
+    </header>
+    <main>
+        <div class="main-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="header-logo text-center">
+                          
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="section-heading">
+                            <h2>User Profile</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="section-form">
+                            <form method="POST" action="#">
+                                <div class="row align-items-center mb-10">
+                                    <div class="col-xl-3">
+                                        <label for="Full Name">Full Name</label>
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <input name="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-10">
+                                    <div class="col-xl-3">
+                                        <label >Date of Birth</label>
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <input name="dob" type="date">
+                                       <!-- <i class="fas fa-plus"></i> -->
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-10">
+                                    <div class="col-xl-3">
+                                        <label >Gender</label>
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <input name="gender" type="text">
+                                        <!-- <i class="fas fa-plus"></i> -->
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-10">
+                                    <div class="col-xl-3">
+                                        <label >NIC</label>
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <input name="nic" type="text">
+                                        <!-- <i class="fas fa-plus"></i> -->
+                                    </div>
+                                </div>
+                                <div class="row align-items-center mb-10">
+                                    <div class="col-xl-3">
+                                        <label >Designation</label>
+                                    </div>
+                                    <div class="col-xl-9">
+                                        <input name="designation" type="text">
+                                        <!-- <i class="fas fa-plus"></i> -->
+                                    </div>
+                                </div>
+                                <div class="row mb-50 mt-30">
+                                    <div class="col-xl-12">
+                                        <div class="user-profile-btn">
+                                            <div class="row">
+                                                <div class="col-xl-12">
+                                                    <button  id="clearButton" class="btn btn-clear">Clear</button>
+                                                    <button type="button"  id="saveButton" class="btn btn-click">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </main>
+
+    <!-- JS here -->
+    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="js/vendor/jquery-1.12.4.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/isotope.pkgd.min.js"></script>
+    <script src="js/one-page-nav-min.js"></script>
+    <script src="js/slick.min.js"></script>
+    <script src="js/ajax-form.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/jquery.nice-select.min.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+    <script src="js/imagesloaded.pkgd.min.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
+    <script>
+	
+    var addressFromLink = '';
+	$(document).ready(function () {
+       addressFromLink = getQueryVariable("address");
+    });
+
+    $(document).on('click', '.btn-click', function (evt) {
+            evt.preventDefault();
+            var address = addressFromLink;
+            var name = $("input[type=text][name=name]").val();
+            var dob  = $("input[type=date][name=dob]").val();
+            var gender = $("input[type=text][name=gender]").val();
+            var nic = $("input[type=text][name=nic]").val();
+            var designation = $("input[type=text][name=designation]").val();
+            
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:8000/api/setUserDetail?address='+address+'&name='+name+'&dob='+dob+'&gender='+gender+'&nic='+nic+'&designation='+designation+'',
+                cache: false,
+                complete: function (data, status) { 
+                    if (status === 'error') {
+                        alert('Error Occured. Check Node logs.');
+                    }
+                    else {
+                        console.log(data);
+                        alert('User Details Added');
+                    }
+                }
+            });
+    });
+
+    $(document).on('click', '.btn-clear', function (){
+        window.location.reload(true);
+    });
+
+     function getQueryVariable(variable)
+    {   
+      var query = window.location.search.substring(1);
+      var vars = query.split("&");
+      for (var i=0;i<vars.length;i++) 
+      {
+        var pair = vars[i].split("=");
+        if(pair[0] == variable)
+        {
+          return pair[1];
+        }
+      }
+        return(false);
+    }
+
+    </script>
+		
+
+</body>
+
+</html>

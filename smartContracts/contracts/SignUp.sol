@@ -1,5 +1,4 @@
 pragma solidity >=0.4.21 <0.6.0;
-pragma experimental ABIEncoderV2;
 
 contract Signup {
 
@@ -37,7 +36,7 @@ contract Signup {
             set: true
         });
     }
-    function setDetail(address _userAddress, string memory name,string memory dob,string memory gender,
+    function setUserDetail(address _userAddress, string memory name,string memory dob,string memory gender,
     string memory nic,string memory desigination ) public {
         userDetails storage detail = details[_userAddress];
         require(!detail.set,"Profile is already saved");
@@ -50,8 +49,6 @@ contract Signup {
             desigination:desigination,
             set:true
         });
-
-
 }
 
     function getUser(address _userAddress) public view returns (int) {
@@ -64,17 +61,17 @@ contract Signup {
         return 1;
     }
 
-   function get(address _userAddress) public view returns (User memory s, userDetails memory t) {
-           s.username = users[_userAddress].username;
-           s.password = users[_userAddress].password;
-           s.privateKey = users[_userAddress].privateKey;
+//    function getUserDetails(address _userAddress) public view returns (User memory s, userDetails memory t) {
+//            s.username = users[_userAddress].username;
+//            s.password = users[_userAddress].password;
+//            s.privateKey = users[_userAddress].privateKey;
 
-           t.name = details[_userAddress].name;
-           t.DOB = details[_userAddress].DOB;
-           t.gender = details[_userAddress].gender;
-           t.NIC = details[_userAddress].NIC;
-           t.desigination = details[_userAddress].desigination;
+//            t.name = details[_userAddress].name;
+//            t.DOB = details[_userAddress].DOB;
+//            t.gender = details[_userAddress].gender;
+//            t.NIC = details[_userAddress].NIC;
+//            t.desigination = details[_userAddress].desigination;
 
-           }
+//            }
 }
 
