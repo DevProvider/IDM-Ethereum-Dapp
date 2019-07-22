@@ -17,7 +17,7 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0xD46b9Db3303625656e67A37c6003ab005acB5A53';
+var contractAddress = '0xC87877f3B79f466b78e5890B50c260A1c0deB93f';
  
 
 
@@ -28,6 +28,7 @@ var contract = new web3.eth.Contract(contractInfo.abi, contractAddress);
 var accounts = [];
 var emptyAccounts = [];
 getEmptyAccounts();
+var loginAccount = '' ;
 
 //declare port
 var port = process.env.PORT || 8000;
@@ -63,7 +64,7 @@ app.listen(port, function () {
     return f;
   }(-1));
   
-  app.get('/api/createuser', async function (req, res) {
+app.get('/api/createuser', async function (req, res) {
 
     var increment = new Increment();
     
@@ -77,7 +78,8 @@ app.listen(port, function () {
             res.status(200).send(resp);
         }).on('error', (_error) => {
             getEmptyAccounts();
-            res.status(500).send(_error);
+
+            //res.status(500).send(_error);
             console.log(_error);
         });
     }
@@ -88,7 +90,7 @@ app.listen(port, function () {
     
 });
 
- app.get('/api/setUserDetail', async function (req, res) {
+app.get('/api/setUserDetail', async function (req, res) {
 
     console.log(req.query);
     var increment = new Increment();
@@ -105,12 +107,64 @@ app.listen(port, function () {
     });
     
 });
-     
 
 app.get('/api/exportcsv',async function (req,res) {
     exportcsv.writecsv(req.query.username,req.query.password,req.query.address,req.query.privateKey);
     res.status(200).send("Csv Created");
 });
+
+app.get('/api/login',async function (req,res){
+    
+    web3.eth.getAccounts().then(function(_account){
+        accounts = _account
+        loginAccount = '';
+  
+        for(let i = 0 ; i < _account.length; i++){
+            contract.methods.login(_account[i],req.query.username,req.query.password).call().then(function(_response){
+                if (_response != '0x0000000000000000000000000000000000000000')
+              {
+                  {
+
+                      loginAccount = _account[i];
+
+                  }
+              }
+
+              
+          });
+      }
+      
+      })
+
+      if (loginAccount == ''){
+          res.status(404).send("User not Found");
+      }
+      else{
+        var resp = {
+          
+            accountAddress : loginAccount
+         };
+        res.status(200).send(resp);
+      }
+      
+});
+
+app.get('/api/getUserDetails',async function (req ,res){
+    contract.methods.getUserDetails(req.query.address).call().then(function(__response){
+        var resp = {
+            name : __response.t[0] , 
+            desg : __response.t[4] 
+        };
+        res.status(200).send(resp);
+   
+    //res.status(200).send(resp);
+    }).on('error', (_error) => {
+    
+    res.status(500).send(_error);
+    console.log(_error);
+})
+});
+
 
 function getEmptyAccounts() {
 
@@ -134,7 +188,7 @@ function getEmptyAccounts() {
     console.log(emptyAccounts.length);
     console.log(accounts[0]);
 }
-   
-        
+
+
 
         
