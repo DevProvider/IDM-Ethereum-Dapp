@@ -35,6 +35,7 @@
 
     </header>
     <main>
+        
         <div class="main-wrapper">
             <div class="container">
                 <div class="row">
@@ -71,6 +72,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                      
                                     </div>
                                 </div>
                             </form>
@@ -78,8 +80,11 @@
                     </div>
                 </div>
                 
+                
             </div>
+            
         </div>
+        
     </main>
 
     <!-- JS here -->
@@ -106,6 +111,23 @@
  
     <script src="http://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script>
+    //     $(document).on('ready',function(){
+    //         $.ajax({
+    //             type: 'GET',
+    //             url: 'http://localhost:8000/api/login?username=12@&password=12@',
+    //             cache: false,
+    //             complete: function (data, status) { 
+    //                 if(status == 'success'){
+    //                 $('.input-accountAddress').val(data.responseJSON.accountAddress);
+    //                 console.log("Page Loaded");
+    //                 }
+    //             else{
+    //                 console.log("Page Loaded");
+    //             }
+    //         }
+    //     });
+    // });
+    
 		$(document).on('click', '.btn-click', function () {
             var username = $("input[type=text][name=username]").val();
             var password  = $("input[type=password][name=password]").val();
@@ -115,27 +137,26 @@
                 cache: false,
                 complete: function (data, status) { 
                     if(status == 'success'){
-                    $('.input-accountAddress').val(data.responseJSON.accountAddress);
+                   
                     console.log(data);
-                    
+                    let _loginAddress = data.responseJSON.accountAddress
+                    window.location.href = "userProfile.html?address="+_loginAddress+"";
                     alert('Login Successfull');
                 }
                 else{
                     alert('Error Occured. Check Node logs.');
                 }
                
-            let _loginAddress = data.responseJSON.accountAddress
-           window.location.href = "userProfile.html?address="+_loginAddress+"";
+            
         
             }
             });
-        $(document).on('click', '.btn-clear', function (){
+    });
+
+    $(document).on('click', '.btn-clear', function (){
             window.location.reload(true);
         });
        
-
-        
-    });
 
     </script>
 

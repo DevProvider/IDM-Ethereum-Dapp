@@ -17,7 +17,7 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0xC87877f3B79f466b78e5890B50c260A1c0deB93f';
+var contractAddress = '0x664b873208F8214e8264E0cAe42Cc17d9A547664';
  
 
 
@@ -113,40 +113,50 @@ app.get('/api/exportcsv',async function (req,res) {
     res.status(200).send("Csv Created");
 });
 
-app.get('/api/login',async function (req,res){
-    
-    web3.eth.getAccounts().then(function(_account){
-        accounts = _account
-        loginAccount = '';
-  
-        for(let i = 0 ; i < _account.length; i++){
-            contract.methods.login(_account[i],req.query.username,req.query.password).call().then(function(_response){
-                if (_response != '0x0000000000000000000000000000000000000000')
-              {
-                  {
 
-                      loginAccount = _account[i];
-
-                  }
-              }
-
-              
-          });
-      }
+// async function login (username , password) {
+//     web3.eth.getAccounts().then(function(_account){
+//         accounts = _account
       
-      })
+//         for(let i = 0 ; i < _account.length; i++){
+//             console.log('the LOOP is running');
 
-      if (loginAccount == ''){
-          res.status(404).send("User not Found");
-      }
-      else{
+//             contract.methods.login(_account[i],username,password).call().then(function(_response){
+//                 if (_response != '0x0000000000000000000000000000000000000000'){
+//                     loginAccount = _response;
+//                     console.log(loginAccount);
+//                 }
+//             });
+//         }
+//     })
+// }
+
+app.get('/api/login',async function (req,res){
+
+    web3.eth.getAccounts().then(function(_account){
+                accounts = _account
+              
+                for(let i = 0 ; i < _account.length; i++){
+                    console.log('the LOOP is running');
+        
+                    contract.methods.login(_account[i],req.query.username,req.query.password).call().then(function(_response){
+                        if (_response != '0x0000000000000000000000000000000000000000'){
+                            loginAccount = _response;
+                            console.log(loginAccount);
+                        }
+                    });
+                }
+            })
+    
+    if (loginAccount == '') {
+        res.status(404).send("User not Found");
+    }
+    else {
         var resp = {
-          
             accountAddress : loginAccount
          };
         res.status(200).send(resp);
       }
-      
 });
 
 app.get('/api/getUserDetails',async function (req ,res){
