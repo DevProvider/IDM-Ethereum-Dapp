@@ -32,6 +32,7 @@ var port = process.env.PORT || 8000;
 if (process.env.VCAP_APPLICATION) {
   port = process.env.PORT;
 }
+app.use(express.static('web-app'));
 
 // app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -158,17 +159,11 @@ app.get('/api/getUserDetails',async function (req ,res){
             desg : __response.t[4] 
         };
         res.status(200).send(resp);
-   
-    }).on('error', (_error) => {
-    
-    res.status(500).send(_error);
-    console.log(_error);
-})
+    });
 });
 
 
 function getEmptyAccounts() {
-
     web3.eth.getAccounts().then(function(_accounts){
         accounts = _accounts;
         emptyAccounts = [];
@@ -186,7 +181,3 @@ function getEmptyAccounts() {
     console.log(emptyAccounts.length);
     console.log(accounts[0]);
 }
-
-
-
-        
