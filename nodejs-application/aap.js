@@ -17,10 +17,7 @@ const fs = require('fs');
 
 //Contract Connection
 const contractInfo = JSON.parse(fs.readFileSync('../smartContracts/build/contracts/Signup.json', 'utf8'));
-var contractAddress = '0x664b873208F8214e8264E0cAe42Cc17d9A547664';
- 
-
-
+var contractAddress = contractInfo.networks['5777'].address;
 
 var privateKey = setting.privateKeyForGivenMnemonics;
 
@@ -132,31 +129,26 @@ app.get('/api/exportcsv',async function (req,res) {
 // }
 
 app.get('/api/login',async function (req,res){
-
     web3.eth.getAccounts().then(function(_account){
-                accounts = _account
-              
-                for(let i = 0 ; i < _account.length; i++){
-                    console.log('the LOOP is running');
-        
-                    contract.methods.login(_account[i],req.query.username,req.query.password).call().then(function(_response){
-                        if (_response != '0x0000000000000000000000000000000000000000'){
-                            loginAccount = _response;
-                            console.log(loginAccount);
-                        }
-                    });
+        accounts = _account
+        let k = 0;
+        for(let i = 0 ; i < _account.length; i++){
+            contract.methods.login(_account[i],req.query.username,req.query.password).call().then(function(_response){
+                if (_response != '0x0000000000000000000000000000000000000000'){
+                    loginAccount = _response;
+                    var resp = {
+                        accountAddress : loginAccount
+                     };
+                     k =  1; 
+                    res.status(200).send(resp);
                 }
-            })
-    
-    if (loginAccount == '') {
-        res.status(404).send("User not Found");
-    }
-    else {
-        var resp = {
-            accountAddress : loginAccount
-         };
-        res.status(200).send(resp);
-      }
+                else if(i == 9 && k != 1)
+                {
+                    res.status(400).send("User Not Found");
+                }
+            });
+        }
+    });
 });
 
 app.get('/api/getUserDetails',async function (req ,res){
@@ -167,7 +159,6 @@ app.get('/api/getUserDetails',async function (req ,res){
         };
         res.status(200).send(resp);
    
-    //res.status(200).send(resp);
     }).on('error', (_error) => {
     
     res.status(500).send(_error);
@@ -190,10 +181,7 @@ function getEmptyAccounts() {
                     }
                 }
             });
-        }
-        
-    
-    
+        }    
     });
     console.log(emptyAccounts.length);
     console.log(accounts[0]);

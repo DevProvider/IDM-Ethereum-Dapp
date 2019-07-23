@@ -12,6 +12,5 @@ module.exports = {
                                  "cbafe0a7fb792680ae5f7012c6ef29d0c1d4ec55df1c7e9cee5e058db5133c4d",
                                  "b2b59719252bb2d4e7a4aa62bb8b848d8399a36ad434a643c834ec4484ec21e9",
                                  "e3944b4103b5994597b2e1293f3d267a2e84f55e03ec48cfb91745f7410ef1bf"
-     
                                  ]
 }
