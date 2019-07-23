@@ -47,7 +47,7 @@ app.use(function(req, res, next) {
 
 //run app on port
 app.listen(port, function () {
-  console.log('app running on port: %d', port);
+  console.log('Open your browser and go to link http://locahost:%d', port);
 });
 
 //-------------------------------------------------------------
