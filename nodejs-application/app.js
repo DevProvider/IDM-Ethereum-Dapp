@@ -32,6 +32,7 @@ var port = process.env.PORT || 8000;
 if (process.env.VCAP_APPLICATION) {
   port = process.env.PORT;
 }
+app.use(express.static('web-app'));
 
 // app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -46,7 +47,7 @@ app.use(function(req, res, next) {
 
 //run app on port
 app.listen(port, function () {
-  console.log('app running on port: %d', port);
+  console.log('Open your browser and go to link http://locahost:%d', port);
 });
 
 //-------------------------------------------------------------
@@ -189,7 +190,6 @@ app.get('/api/rejectNotification',async function (req , res ){
 
 
 function getEmptyAccounts() {
-
     web3.eth.getAccounts().then(function(_accounts){
         accounts = _accounts;
         emptyAccounts = [];
@@ -207,7 +207,3 @@ function getEmptyAccounts() {
     console.log(emptyAccounts.length);
     console.log(accounts[0]);
 }
-
-
-
-        
