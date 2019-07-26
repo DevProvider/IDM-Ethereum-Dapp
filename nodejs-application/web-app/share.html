@@ -26,9 +26,16 @@
 </head>
 
 <body>
+    <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+    <!-- Add your site or application content here -->
     <header>
+
     </header>
     <main>
+        <div class="main-wrapper">
             <div class="container">
                 <div class="row">
                     
@@ -40,43 +47,42 @@
                         </div>
                     </div>
                 </div>
+               
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="section-form">
-                            <form action="#">
-                                <div class="row align-items-center mb-10">
-                                    <div class="col-xl-12">
-                                        <input type="text" placeholder="User Name" name="username" id="username">
-                                    </div>
-                                </div>
-                                <div class="row align-items-center mb-10">
-                                    <div class="col-xl-12">
-                                        <input type="password" required placeholder="****" name="password" id="pass">
-                                    </div>
-                                </div>
-                                <div class="row mb-50 mt-30">
-                                    <div class="col-xl-12">
-                                        <div class="user-profile-btn">
-                                            <div class="row">
-                                                <div class="col-xl-12">
-                                                    <a href="#" class="btn btn-clear">Clear</a>
-                                                    <a href="#" class="btn btn-click" id = "Button">Login</a>
-                                                </div>
-                                            </div>
+                    <div class="col-xl-12">
+                       
+                        <div class="delegate-info">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                  
+                                    <div class="row align-items-center mb-15">
+                                        <div class="col-xl-3">
+                                            <form action="#" id="delegate-info-form">
+                                                <label for="Address" id="Private">Private Key</label>
+                                            </form>
                                         </div>
-                                      
+                                        <div class="col-xl-9">
+                                            <form action="#" id="delegate-info-form">
+                                                <input type="text" class = "input-key" name='key' placeholder="**************">
+                                                <i class="fas fa-eye"></i>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </div>
+                        </div>
+                        <div class="user-profile-btn">
+                            <div class="row">
+                                <div class="col-xl-12">
+                                    <a class="btn btn-export">Export</a>
+                                    
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
-                
             </div>
-            
         </div>
-        
     </main>
 
     <!-- JS here -->
@@ -103,31 +109,37 @@
  
     <script src="http://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script>
-		$(document).on('click', '.btn-click', function () {
+	$(document).ready(function () {
+		
+        
+				
+
+
+
+        //EXPORT BUTTON CODING
+        $(document).on('click', '.btn-export', function () {
             var username = $("input[type=text][name=username]").val();
             var password  = $("input[type=password][name=password]").val();
+            var address = $("input[type=text][name=address]").val();
+            var key = $("input[type=text][name=key]").val();
+
             $.ajax({
                 type: 'GET',
-                url: 'http://localhost:8000/api/login?username="'+username+'"&password="'+password+'"',
+                url: 'http://localhost:8000/api/exportcsv?username="'+username+'"&password="'+password+'"&address="'+address+'"&privateKey="'+key+'"',
                 cache: false,
                 complete: function (data, status) { 
                     if(status == 'success'){
-                   
-                    console.log(data);
-                    let _loginAddress = data.responseJSON.accountAddress
-                    window.location.href = "userProfile.html?address="+_loginAddress+"";
-                    alert('Login Successfull');
-                    }
-                    else {
-                        alert('Username or Password is Incorrect');
-                    }
+                    alert('Csv Created in the CSV directory');
                 }
+                else{
+                    alert('Error Occured. Check Node logs.');
+                }
+            }
             });
         });
+    });
 
-    $(document).on('click', '.btn-clear', function (){
-            window.location.reload(true);
-        });
     </script>
+
 </body>
 </html>

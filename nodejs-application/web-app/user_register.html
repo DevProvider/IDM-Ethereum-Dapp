@@ -167,9 +167,19 @@
                                         </div>
                                         <div class="col-xl-9">
                                             <form action="#" id="delegate-info-form">
-                                                <label for="Address">01/01/2025</label>
+                                                <label for="Address" id="date">01/01/2025</label>
                                             </form>
                                         </div>
+                                        <div class="col-xl-3">
+                                                <form action="#" id="delegate-info-form">
+                                                    <label for="Address">Status</label>
+                                                </form>
+                                            </div>
+                                            <div class="col-xl-9">
+                                                <form action="#" id="delegate-info-form">
+                                                    <label for="Address" id="status" name ="state">Accepted/Rejected</label>
+                                                </form>
+                                            </div>
                                     </div>
                                 </div>
                                 <!--
@@ -206,7 +216,7 @@
                             <div class="row">
                                 <div class="col-xl-12">
                                     <a href="#" class="btn btn-click">Clear</a>
-                                    <a href="#" class="btn">Register</a>
+                                    <a href="#" class="btn btn-register">Register</a>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +257,7 @@
                 url: 'http://localhost:8000/api/getUserDetails?address='+address+'',
                 cache: false,
                 complete: function (data, status) { 
-                    if(status == 'success'){
+                    if(status === 'success'){
                     $('.input-name').val(data.responseJSON.name);
                     $('.input-desg').val(data.responseJSON.desg);
                     console.log(data);
@@ -266,6 +276,46 @@
             
             $.ajax({
                 type: 'GET',
+                url: 'http://localhost:8000/api/getTransactionDetail?address='+address+'',
+                cache: false,
+                complete: function (data, status) { 
+                    if(status == 'success'){
+
+                        $("#date").empty();
+                        $("#date").append(data.responseJSON.date);
+
+                        $("#status").empty();
+                          
+                         let state = data.responseJSON.state;
+
+                         if (state==0){
+                            $("#status").append("Pending");
+                         }
+                         else if (state==1){
+                            $("#status").append("Accepted");
+
+                         }
+                         else if (state==2){
+                            $("#status").append("Rejected");
+                            
+                         }
+
+
+                       
+                    console.log(data);
+                  
+                }
+                else {
+                    alert('Error Occured. Check Node logs.');
+                }
+
+               
+            }
+
+
+             });  
+             $.ajax({
+                type: 'GET',
                 url: 'http://localhost:8000/api/getUserDetails?address='+address+'',
                 cache: false,
                 complete: function (data, status) { 
@@ -279,11 +329,45 @@
                 else {
                     alert('Error Occured. Check Node logs.');
                 }
+
+               
             }
 
+
              });  
-        
              });
+              
+             $(document).on('click', '.btn-register', function () {
+
+                 var to_address = $("input[type=text][name=delegateAddress]").val();
+                 var from_address= addressFromLink;
+                 var state =  $('#status');
+                 var text = state.text();
+                 if (text=="Pending"){
+                 $.ajax({
+                          type: 'GET',
+                           url: 'http://localhost:8000/api/receiveNotification?to_address='+to_address+'&from_address='+from_address+'',
+                          cache: false,
+                        complete: function (status) { 
+                         if(status == 'error'){
+                       alert('Error Occured. Check Node logs.');
+      
+                        }
+                   else {
+                          alert('success');
+                        }
+                 }
+
+                 });  
+                }
+                else{
+                    $("#btn-register").prop("disabled", true);
+                    alert("Already Accepted/Rejected");
+                }
+          });
+
+        
+       
         });
     
 

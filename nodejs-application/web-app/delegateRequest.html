@@ -48,7 +48,7 @@
                     <div class="col-xl-9" align="right">
                         <a href="delegateRequest.html" class="btn " id = "">Requests</a>
                         <a href="userProfile.html" class="btn " id = "">Profile</a>
-                        <a href="#" class="btn btn-reg" id = "">Status</a>
+                        <a href="user_register.html" class="btn " id = "">Status</a>
                         <a href="index.html" class="btn btn-logout" id = "Button">Logout</a>
                     </div>
                     <div class="col-xl-1">
@@ -62,7 +62,7 @@
                     <div class="row">
                         <div class="col-xl-12">
                             <div class="section-heading">
-                                <h2>User Profile</h2>
+                                <h2>Delegate Request</h2>
                             </div>
                         </div>
                     </div>
@@ -73,37 +73,11 @@
                                 <form method="POST" action="#">
                                     <div class="row align-items-center mb-10">
                                         <div class="col-xl-3">
-                                            <label for="Full Name">Full Name</label>
+                                            <label>Full Name</label>
                                         </div>
                                         <div class="col-xl-9">
-                                            <input name="name" type="text">
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-10">
-                                        <div class="col-xl-3">
-                                            <label >Date of Birth</label>
-                                        </div>
-                                        <div class="col-xl-9">
-                                            <input name="dob" type="date">
-                                            <!-- <i class="fas fa-plus"></i> -->
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-10">
-                                        <div class="col-xl-3">
-                                            <label >Gender</label>
-                                        </div>
-                                        <div class="col-xl-9">
-                                            <input name="gender" type="text">
-                                            <!-- <i class="fas fa-plus"></i> -->
-                                        </div>
-                                    </div>
-                                    <div class="row align-items-center mb-10">
-                                        <div class="col-xl-3">
-                                            <label >NIC</label>
-                                        </div>
-                                        <div class="col-xl-9">
-                                            <input name="nic" type="text">
-                                            <!-- <i class="fas fa-plus"></i> -->
+                                            
+                                            <input name="name" class="input-name" type="text" readonly="readonly" >
                                         </div>
                                     </div>
                                     <div class="row align-items-center mb-10">
@@ -111,17 +85,37 @@
                                             <label >Designation</label>
                                         </div>
                                         <div class="col-xl-9">
-                                            <input name="designation" type="text">
+                                            
+                                            <input name="designation" class="input-desg" type="text" readonly="readonly"   >
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row align-items-center mb-10">
+                                        <div class="col-xl-3">
+                                            <label >User address</label>
+                                        </div>
+                                        <div class="col-xl-9">
+                                            <input name="address" class= "input-addr" type="text" readonly="readonly" >
+                                            <i class="fas fa-copy"></i>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center mb-10">
+                                        <div class="col-xl-3">
+                                            <label >Expire Date</label>
+                                        </div>
+                                        <div class="col-xl-9">
+                                            <input name="expire" type="date">
                                             <!-- <i class="fas fa-plus"></i> -->
                                         </div>
                                     </div>
+                                    
                                     <div class="row mb-50 mt-30">
                                         <div class="col-xl-12">
-                                            <div class="user-profile-btn">
+                                            <div class="">
                                                 <div class="row">
                                                     <div class="col-xl-12">
-                                                        <button  id="clearButton" class="btn btn-clear">Clear</button>
-                                                        <button type="button"  id="saveButton" class="btn btn-click">Save</button>
+                                                        <button  id="reject" class="btn btn-reject">Reject</button>
+                                                        <button type="button"  id="accept" class="btn btn-accept">Accept</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -159,76 +153,85 @@
 
             var addressFromLink = '';
             $(document).ready(function () {
-               addressFromLink = getQueryVariable("address");
-               var address =addressFromLink;
+               addressFromLink = getQueryVariable("from_address");
+               _addressFromLink =getQueryVariable("address")
+               var address = addressFromLink;
+
 
                $.ajax({
-                   type:'GET',
-                   url:'http://localhost:8000/api/getTransactionDetail?address='+address+'',
-                   cache:false,
-                   complete: function(data , status){
-                       if(status==='success'){
-                           let _address = data.responseJSON._address;
-                           let from_address =data.responseJSON.from_address;
-                           console.log(data);
-                           if(address==_address){
-                               alert("You hava a Notification");
-                              window.location.href='delegateRequest.html?from_address='+from_address+'&address='+address+'';
-                           }
-                           else{
-                           alert("No new Notifications");
-                       }
- 
-                       }
-                       else{
-                           alert("Check node logs!");
-                       }
-                       
-                   }
+                type: 'GET',
+                url: 'http://localhost:8000/api/getUserDetails?address='+address+'',
+                cache: false,
+                complete: function (data, status) { 
+                    if(status == 'success'){
+                        $(".input-name").val(data.responseJSON.name);
+                        $(".input-desg").val(data.responseJSON.desg);
+                        $(".input-addr").val(address);
+                    console.log(data);
+                  
+                }
+                else {
+                    alert('Error Occured. Check Node logs.');
+                }
+            }
 
-               });
-               
+             });  
+
 
            });
 
-            $(document).on('click', '.btn-click', function (evt) {
+            $(document).on('click', '.btn-accept', function (evt) {
                 evt.preventDefault();
-                var address = addressFromLink;
-                var name = $("input[type=text][name=name]").val();
-                var dob  = $("input[type=date][name=dob]").val();
-                var gender = $("input[type=text][name=gender]").val();
-                var nic = $("input[type=text][name=nic]").val();
-                var designation = $("input[type=text][name=designation]").val();
+                var address = _addressFromLink;
+                var date  = $("input[type=date][name=expire]").val();
+                
 
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8000/api/setUserDetail?address='+address+'&name='+name+'&dob='+dob+'&gender='+gender+'&nic='+nic+'&designation='+designation+'',
+                    url: 'http://localhost:8000/api/acceptNotification?address='+address+'&date='+date+'',
                     cache: false,
-                    complete: function (data, status) { 
+                    complete: function (status) { 
                         if (status === 'error') {
                             alert('Error Occured. Check Node logs.');
                         }
                         else {
-                            console.log(data);
-                            alert('User Details Added');
+                            alert('Added Delegate!');
                         }
                     }
                 });
 
 
 
-                window.location.href = "user_register.html?address="+address+"";
+               
             });
 
-            $(document).on('click', '.btn-clear', function (){
-                window.location.reload(true);
+            $(document).on('click', '.btn-reject', function (evt) {
+                evt.preventDefault();
+                var address = _addressFromLink;
+                var date  = $("input[type=date][name=expire]").val();
+                
+
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:8000/api/rejectNotification?address='+address+'&date='+date+'',
+                    cache: false,
+                    complete: function (status) { 
+                        if (status === 'error') {
+                            alert('Error Occured. Check Node logs.');
+                        }
+                        else {
+                            alert('Rejected Delegate!');
+                        }
+                    }
+                });
+
+
+
+               
             });
 
-            $(document).on('click', '.btn-reg', function (){
 
-                var address = addressFromLink;
-                window.location.href = "user_register.html?address="+address+"";
-            });
+            
 
 
 

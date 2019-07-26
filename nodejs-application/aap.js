@@ -110,24 +110,6 @@ app.get('/api/exportcsv',async function (req,res) {
     res.status(200).send("Csv Created");
 });
 
-
-// async function login (username , password) {
-//     web3.eth.getAccounts().then(function(_account){
-//         accounts = _account
-      
-//         for(let i = 0 ; i < _account.length; i++){
-//             console.log('the LOOP is running');
-
-//             contract.methods.login(_account[i],username,password).call().then(function(_response){
-//                 if (_response != '0x0000000000000000000000000000000000000000'){
-//                     loginAccount = _response;
-//                     console.log(loginAccount);
-//                 }
-//             });
-//         }
-//     })
-// }
-
 app.get('/api/login',async function (req,res){
     web3.eth.getAccounts().then(function(_account){
         accounts = _account
@@ -152,18 +134,57 @@ app.get('/api/login',async function (req,res){
 });
 
 app.get('/api/getUserDetails',async function (req ,res){
+    console.log(req.query.address);
+
     contract.methods.getUserDetails(req.query.address).call().then(function(__response){
         var resp = {
             name : __response.t[0] , 
             desg : __response.t[4] 
         };
         res.status(200).send(resp);
-   
-    }).on('error', (_error) => {
+   })
+
+});
+
+app.get('/api/receiveNotification',async function(req ,res){
+
     
-    res.status(500).send(_error);
-    console.log(_error);
-})
+
+        contract.methods.receiveNotification(req.query.to_address,req.query.from_address).send({from: accounts[0],gas:3000000}).on('transactionHash', (_hash) => {
+        
+            res.status(200).send("success");
+        })
+            
+});
+
+app.get('/api/getTransactionDetail',async function (req ,res){
+        
+    contract.methods.getTransactionDetail(req.query.address).call().then(function(_resp){
+        var resp ={
+            _address : _resp[0],
+            from_address: _resp[1],
+            state : _resp[2],
+            date :_resp[3]
+        };
+        res.status(200).send(resp);
+    });
+
+});
+
+app.get('/api/acceptNotification',async function (req , res ){
+
+    contract.methods.acceptNotification(req.query.address , req.query.date ).send({from: accounts[0],gas:3000000}).on('transactionHash', (_hash) => {
+
+        res.status(200).send("success");
+    })
+});
+
+app.get('/api/rejectNotification',async function (req , res ){
+
+    contract.methods.rejectNotification(req.query.address , req.query.date ).send({from: accounts[0],gas:3000000}).on('transactionHash', (_hash) => {
+
+        res.status(200).send("success");
+    })
 });
 
 
